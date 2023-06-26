@@ -1,0 +1,60 @@
+[Unit]
+Description=discord account verification  Account verification bot for club elec's Discord server
+After=network.target
+
+[Service]
+Type=exec
+
+# environment variables
+Environment=HOME=/opt/discord-account-verification/
+Environment=BOT_TOKEN=
+Environment=PUBLIC_CHANNEL=
+Environment=DATABASE_PATH=/opt/discord-account-verification/database.db
+
+# working directory and exec
+WorkingDirectory=/opt/discord-account-verification
+ExecStart=/opt/discord-account-verification/.env/bin/python3 main.py
+ExecStop=/usr/bin/kill -9 $MAINPID
+Restart=on-failure
+RestartSec=10s
+User=discord-account-verification
+Group=discord-account-verification
+
+# filesystem
+TemporaryFileSystem=/:ro
+BindReadOnlyPaths=/lib/ /lib64/ /usr/lib/ /usr/lib64/ /opt/discord-account-verification/
+BindReadOnlyPaths=/usr/bin/python3 /usr/bin/kill
+BindPaths=/opt/discord-account-verification/database.db
+PrivateTmp=true
+PrivateDevices=true
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectKernelLogs=true
+ReadWritePaths=
+
+# network
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+# misc
+SystemCallArchitectures=native
+SystemCallFilter=
+NoNewPrivileges=true
+RestrictRealtime=true
+MemoryDenyWriteExecute=true
+ProtectKernelLogs=true
+LockPersonality=true
+ProtectHostname=true
+RemoveIPC=true
+RestrictSUIDSGID=true
+ProtectClock=true
+ProtectProc=invisible
+
+# capabilities
+RestrictNamespaces=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+[Install]
+WantedBy=multi-user.target
+
