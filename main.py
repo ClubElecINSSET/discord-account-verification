@@ -268,8 +268,7 @@ async def on_member_remove(member) -> None:
 async def on_member_join(member) -> None:
     channel = client.get_channel(public_channel)
     await channel.send(
-        f"Coucou {member.mention}, je suis club elec security, le bot de vérification de comptes Discord missionné par ce serveur.\nSi vous êtes étudiant·e ou personnel, vous pouvez cliquer sur le bouton ci-dessous pour valider votre compte avec votre courriel universitaire. Vous pouvez aussi taper la commande `/verify`. Laissez-vous guider, je suis un gentil petit bot !\nSi vous ne faites pas partie de l'UPJV, vous pouvez vous présenter dans ce salon afin que nous puissons valider votre compte manuellement et vous donner les autorisations adéquates.\nMerci et à très vite. :grin:",
-        view=EmailModalView(),
+        f"Coucou {member.mention}, je suis club elec security, le bot de vérification de comptes Discord missionné par ce serveur.\nSi vous êtes étudiant·e ou personnel, vous pouvez taper la commande `/verify` pour valider votre compte avec votre courriel universitaire. Laissez-vous guider, je suis un gentil petit bot !\nSi vous ne faites pas partie de l'UPJV, vous pouvez vous présenter dans ce salon afin que nous puissons valider votre compte manuellement et vous donner les autorisations adéquates.\nMerci et à très vite. :grin:",
     )
 
 
