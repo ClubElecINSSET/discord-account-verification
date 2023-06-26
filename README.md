@@ -40,7 +40,7 @@ We have deployed discord account verification on a server running Debian 11.
 ### Install required packages
 
 ```
-apt install python3-pip python3-venv nginx
+apt install python3-pip python3-venv
 ```
 
 ### Create `discord-account-verification` user
