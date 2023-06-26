@@ -7,6 +7,7 @@ Type=exec
 
 # environment variables
 Environment=HOME=/opt/discord-account-verification/
+Environment=SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 Environment=BOT_TOKEN=
 Environment=PUBLIC_CHANNEL=
 Environment=DATABASE_PATH=/opt/discord-account-verification/database.db
@@ -22,9 +23,9 @@ Group=discord-account-verification
 
 # filesystem
 TemporaryFileSystem=/:ro
-BindReadOnlyPaths=/lib/ /lib64/ /usr/lib/ /usr/lib64/ /opt/discord-account-verification/
-BindReadOnlyPaths=/usr/bin/python3 /usr/bin/kill
-BindPaths=/opt/discord-account-verification/database.db
+BindReadOnlyPaths=/lib/ /lib64/ /usr/lib/ /usr/lib64/ /etc/ssl/certs/
+BindReadOnlyPaths=/usr/bin/python3 /usr/bin/python3.9 /usr/bin/kill
+BindPaths=/opt/discord-account-verification/
 PrivateTmp=true
 PrivateDevices=true
 ProtectControlGroups=true
