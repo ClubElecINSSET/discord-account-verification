@@ -229,7 +229,7 @@ async def unverify(interaction: discord.Interaction, id: str) -> None:
         if user:
             delete_user = c.execute("DELETE FROM users WHERE id = :id", {"id": match})
             conn.commit()
-            role = discord.utils.get(interaction.guild.roles, name="Vérifié")
+            role = discord.utils.get(interaction.guild.roles, name="Vérifiés")
             member = interaction.guild.get_member(int(match))
             await member.remove_roles(role)
             await interaction.response.send_message(
