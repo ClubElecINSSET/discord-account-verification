@@ -10,6 +10,7 @@ Environment=HOME=/opt/discord-account-verification/
 Environment=SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 Environment=BOT_TOKEN=
 Environment=PUBLIC_CHANNEL=
+ROLE=
 Environment=DATABASE_PATH=/opt/discord-account-verification/database.db
 
 # working directory and exec
