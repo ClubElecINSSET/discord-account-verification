@@ -9,12 +9,14 @@ import smtplib
 from email.mime.text import MIMEText
 import datetime
 import re
+import string
 
 import sqlite3
 import traceback
 
 bot_token: str = os.getenv("BOT_TOKEN", "")
 public_channel: int = int(os.getenv("PUBLIC_CHANNEL", ""))
+role_to_add: str = os.getenv("ROLE", "Vérifiés")
 database_path: str = os.getenv("DATABASE_PATH", "./database.db")
 
 
@@ -117,10 +119,10 @@ class CodeModal(discord.ui.Modal, title="Entrez votre code de vérification"):
                 (interaction.user.id, self.email, datetime.datetime.now()),
             )
             conn.commit()
-            role = discord.utils.get(interaction.guild.roles, name="Vérifiés")
+            role = discord.utils.get(interaction.guild.roles, name=role_to_add)
             await interaction.user.add_roles(role)
             await interaction.response.edit_message(
-                content="Bravo !\nVous avez validé votre compte avec succès. :partying_face: :partying_face: :partying_face:\nLe rôle `Vérifié`, vous permettant d’accéder à l’ensemble des fonctionnalités de ce serveur Discord, vous a été ajouté.\n",
+                content=f"Bravo !\nVous avez validé votre compte avec succès. :partying_face: :partying_face: :partying_face:\nLe rôle `{role_to_add}`, vous permettant d’accéder à l’ensemble des fonctionnalités de ce serveur Discord, vous a été ajouté.\n",
                 view=None,
             )
 
@@ -185,21 +187,21 @@ async def verify(interaction: discord.Interaction) -> None:
 
 @client.tree.command(name="whois", description="Qui est cette personne ?")
 @app_commands.checks.has_permissions(manage_messages=True)
-async def whois(interaction: discord.Interaction, message: str) -> None:
-    matches = re.findall(r"<@!?([0-9]{15,20})>", message)
+async def whois(interaction: discord.Interaction, id: str) -> None:
+    matches = re.findall(r"<@!?([0-9]{15,20})>", id)
     if matches:
         match = matches[0]
         get_email = c.execute("SELECT email FROM users WHERE id = :id", {"id": match})
         email = get_email.fetchone()
         if email:
-            username = email[0].split("@").replace(".", " ")
+            username = email[0].split("@")[0].replace(".", " ")
             await interaction.response.send_message(
-                f"{interaction.guild.get_member(int(match))} a pour adresse de courriel : {username}",
+                f"{interaction.guild.get_member(int(match))} a pour nom : {string.capwords(username, sep=None)}\net comme courriel : {email[0]}",
                 ephemeral=True,
             )
         else:
             await interaction.response.send_message(
-                f"{interaction.guild.get_member(int(match))} n’a pas vérifié son compte, il est donc impossible de trouver son adresse de courriel.",
+                f"{interaction.guild.get_member(int(match))} n’a pas vérifié son compte, il est donc impossible de trouver son nom et son courriel.",
                 ephemeral=True,
             )
     else:
@@ -229,7 +231,7 @@ async def unverify(interaction: discord.Interaction, id: str) -> None:
         if user:
             delete_user = c.execute("DELETE FROM users WHERE id = :id", {"id": match})
             conn.commit()
-            role = discord.utils.get(interaction.guild.roles, name="Vérifiés")
+            role = discord.utils.get(interaction.guild.roles, name=role_to_add)
             member = interaction.guild.get_member(int(match))
             await member.remove_roles(role)
             await interaction.response.send_message(
